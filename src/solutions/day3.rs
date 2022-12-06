@@ -15,7 +15,7 @@ fn part1(input: &str) -> i32 {
 }
 
 fn part2(input: &str) -> i32 {
-    input.lines().collect::<Vec<&str>>()
+    input.lines().collect::<Vec<_>>()
         .chunks(3)
         .map(|chunk| items_in_all(chunk))
         .flatten()
@@ -29,7 +29,7 @@ fn items_in_all(compartments: &[&str]) -> HashSet<char> {
         .filter(|c| compartments.iter()
             .all(|compartment| compartment.contains(*c))
         )
-        .collect::<HashSet<char>>()
+        .collect::<HashSet<_>>()
 }
 
 fn priority(c: char) -> i32 {

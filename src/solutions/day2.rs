@@ -6,7 +6,7 @@ pub fn run(input: &str) {
 fn part1(input: &str) -> u32 {
     input.lines()
         .map(|line| line.split(" ")
-            .map(|mv| normalize(mv)).collect::<Vec<u32>>()
+            .map(|mv| normalize(mv)).collect::<Vec<_>>()
         )
         .map(|moves| round_points(moves[1], moves[0]) + moves[1] + 1)
         .sum()
@@ -15,7 +15,7 @@ fn part1(input: &str) -> u32 {
 fn part2(input: &str) -> u32 {
     input.lines()
         .map(|line| line.split(" ")
-            .map(|mv| normalize(mv)).collect::<Vec<u32>>()
+            .map(|mv| normalize(mv)).collect::<Vec<_>>()
         )
         .map(|line| {
             match line[1] {

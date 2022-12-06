@@ -29,7 +29,7 @@ fn part2(input: &str) -> String {
 }
 
 fn parse_stacks(input: &str) -> Vec<Vec<char>> {
-    let stacks_raw = input.split("\n\n").collect::<Vec<&str>>()[0];
+    let stacks_raw = input.split("\n\n").collect::<Vec<_>>()[0];
     let max = stacks_raw.lines().map(|l| l.len()).max().unwrap();
     (1..max).step_by(4)
         .map(|column_i| stacks_raw.lines().rev()
@@ -41,7 +41,7 @@ fn parse_stacks(input: &str) -> Vec<Vec<char>> {
 
 fn parse_instructions(input: &str) -> Vec<(u32, usize, usize)> {
     let re = Regex::new(r"move (\d+) from (\d+) to (\d+)").unwrap();
-    input.split("\n\n").collect::<Vec<&str>>()[1].lines()
+    input.split("\n\n").collect::<Vec<_>>()[1].lines()
         .map(|line| {
             let caps = re.captures(line).unwrap();
             let num = caps.get(1).map_or("", |m| m.as_str()).parse::<u32>().unwrap();
