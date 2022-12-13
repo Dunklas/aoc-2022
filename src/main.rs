@@ -3,7 +3,7 @@ use std::{
     io::{self, Read},
 };
 
-use solutions::{day1, day2, day3, day4, day5, day6};
+use solutions::{day1, day2, day3, day4, day5, day6, day9};
 
 mod solutions;
 
@@ -30,6 +30,9 @@ fn main() {
         },
         "6" => {
             day6::run(&input);
+        },
+        "9" => {
+            day9::run(&input);
         },
         _ => panic!("Solution not found"),
     };
