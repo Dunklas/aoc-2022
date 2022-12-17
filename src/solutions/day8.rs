@@ -5,24 +5,29 @@ pub fn run(input: &str) {
 
 fn part1(input: &str) -> usize {
     let trees = parse(input);
-    trees.iter()
+    trees
+        .iter()
         .enumerate()
-        .map(|(y, row)| row.iter()
-            .enumerate()
-            .filter(|(x, _)| is_visible((y, *x), &trees))
-            .count()
-        ).sum()
+        .map(|(y, row)| {
+            row.iter()
+                .enumerate()
+                .filter(|(x, _)| is_visible((y, *x), &trees))
+                .count()
+        })
+        .sum()
 }
 
 fn part2(input: &str) -> Option<usize> {
     let trees = parse(input);
-    trees.iter()
+    trees
+        .iter()
         .enumerate()
-        .map(|(y, row)| row.iter()
-            .enumerate()
-            .map(|(x, _)| scenic_score((y, x), &trees))
-            .collect::<Vec<usize>>()
-        )
+        .map(|(y, row)| {
+            row.iter()
+                .enumerate()
+                .map(|(x, _)| scenic_score((y, x), &trees))
+                .collect::<Vec<usize>>()
+        })
         .flatten()
         .max()
 }
@@ -32,9 +37,13 @@ fn is_visible(pos: (usize, usize), trees: &Vec<Vec<u32>>) -> bool {
     vec![
         (0..pos.0).map(|y| trees[y][pos.1]).collect(),
         (0..pos.1).map(|x| trees[pos.0][x]).collect(),
-        (pos.0+1..trees.len()).map(|y| trees[y][pos.1]).collect(),
-        (pos.1+1..trees[0].len()).map(|x| trees[pos.0][x]).collect(),
-    ].into_iter().any(|dir: Vec<u32>| dir.into_iter().all(|h| h < current_height))
+        (pos.0 + 1..trees.len()).map(|y| trees[y][pos.1]).collect(),
+        (pos.1 + 1..trees[0].len())
+            .map(|x| trees[pos.0][x])
+            .collect(),
+    ]
+    .into_iter()
+    .any(|dir: Vec<u32>| dir.into_iter().all(|h| h < current_height))
 }
 
 fn scenic_score(pos: (usize, usize), trees: &Vec<Vec<u32>>) -> usize {
@@ -42,9 +51,13 @@ fn scenic_score(pos: (usize, usize), trees: &Vec<Vec<u32>>) -> usize {
     vec![
         (0..pos.0).map(|y| trees[y][pos.1]).rev().collect(),
         (0..pos.1).map(|x| trees[pos.0][x]).rev().collect(),
-        (pos.0+1..trees.len()).map(|y| trees[y][pos.1]).collect(),
-        (pos.1+1..trees[0].len()).map(|x| trees[pos.0][x]).collect(),
-    ].into_iter().map(|dir: Vec<u32>| {
+        (pos.0 + 1..trees.len()).map(|y| trees[y][pos.1]).collect(),
+        (pos.1 + 1..trees[0].len())
+            .map(|x| trees[pos.0][x])
+            .collect(),
+    ]
+    .into_iter()
+    .map(|dir: Vec<u32>| {
         let mut score = 0;
         for height in dir {
             score += 1;
@@ -58,11 +71,13 @@ fn scenic_score(pos: (usize, usize), trees: &Vec<Vec<u32>>) -> usize {
 }
 
 fn parse(input: &str) -> Vec<Vec<u32>> {
-    input.lines()
-        .map(|line| line.chars()
-            .map(|c| c.to_digit(10).unwrap())
-            .collect::<Vec<_>>()
-        )
+    input
+        .lines()
+        .map(|line| {
+            line.chars()
+                .map(|c| c.to_digit(10).unwrap())
+                .collect::<Vec<_>>()
+        })
         .collect::<Vec<_>>()
 }
 

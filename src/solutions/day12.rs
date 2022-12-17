@@ -1,6 +1,6 @@
-use std::collections::{VecDeque, HashSet};
+use std::collections::{HashSet, VecDeque};
 
-use crate::utils::{grid::Grid, coordinate::Coordinate};
+use crate::utils::{coordinate::Coordinate, grid::Grid};
 
 pub fn run(input: &str) {
     println!("Part 1: {}", part1(input));
@@ -16,7 +16,6 @@ fn part1(input: &str) -> usize {
 fn part2(input: &str) -> usize {
     let grid = Grid::<char>::parse(input);
     let start = grid.find_first('E').unwrap();
-
     traverse(start, 'a', &grid).unwrap()
 }
 
@@ -45,7 +44,7 @@ fn height(value: Option<&char>) -> char {
     match value.unwrap() {
         'S' => 'a',
         'E' => 'z',
-        _ => *value.unwrap()
+        _ => *value.unwrap(),
     }
 }
 

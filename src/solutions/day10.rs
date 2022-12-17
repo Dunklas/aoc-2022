@@ -29,7 +29,7 @@ fn part2(input: &str) -> String {
             let col = (cycle_count - 1) % 40;
             let c = match col.abs_diff(x) <= 1 {
                 true => '#',
-                false => '.'
+                false => '.',
             };
             screen[((cycle_count - 1) / 40) as usize][col as usize] = c;
         }
@@ -50,10 +50,16 @@ fn render(screen: [[char; 40]; 6]) -> String {
 }
 
 fn parse(input: &str) -> Vec<(u8, i64)> {
-    input.lines()
+    input
+        .lines()
         .map(|line| match line {
             "noop" => (1, 0),
-            _ => (2, line.split(" ").collect::<Vec<&str>>()[1].parse::<i64>().unwrap())
+            _ => (
+                2,
+                line.split(" ").collect::<Vec<&str>>()[1]
+                    .parse::<i64>()
+                    .unwrap(),
+            ),
         })
         .collect()
 }

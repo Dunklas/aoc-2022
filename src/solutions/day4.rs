@@ -6,21 +6,25 @@ pub fn run(input: &str) {
 }
 
 fn part1(input: &str) -> usize {
-    input.lines()
-        .map(|line| line.split(",")
+    input
+        .lines()
+        .map(|line| {
+            line.split(",")
                 .map(|raw_range| to_range(raw_range))
                 .collect::<Vec<_>>()
-        )
+        })
         .filter(|x| overlaps(x, true))
         .count()
 }
 
 fn part2(input: &str) -> usize {
-    input.lines()
-        .map(|line| line.split(",")
+    input
+        .lines()
+        .map(|line| {
+            line.split(",")
                 .map(|raw_range| to_range(raw_range))
                 .collect::<Vec<_>>()
-        )
+        })
         .filter(|x| overlaps(x, false))
         .count()
 }
@@ -29,7 +33,7 @@ fn to_range(raw_range: &str) -> HashSet<u32> {
     let parts = raw_range.split("-").collect::<Vec<&str>>();
     let start = parts[0].parse::<u32>().unwrap();
     let end = parts[1].parse::<u32>().unwrap();
-    (start..end+1).collect()
+    (start..end + 1).collect()
 }
 
 fn overlaps(ranges: &[HashSet<u32>], fully: bool) -> bool {
@@ -38,7 +42,7 @@ fn overlaps(ranges: &[HashSet<u32>], fully: bool) -> bool {
     let second = ranges.get(1).unwrap();
     match fully {
         true => first.is_subset(second) || second.is_subset(first),
-        false => !first.is_disjoint(second)
+        false => !first.is_disjoint(second),
     }
 }
 
@@ -66,6 +70,5 @@ mod tests {
 6-6,4-6
 2-6,4-8";
         assert_eq!(part2(input), 4);
-
     }
 }

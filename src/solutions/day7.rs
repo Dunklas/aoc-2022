@@ -7,7 +7,8 @@ pub fn run(input: &str) {
 
 fn part1(input: &str) -> usize {
     let files = parse(input);
-    files.iter()
+    files
+        .iter()
         .filter(|(_, file)| **file == File::Directory)
         .map(|(path, _)| size_of(&path, &files))
         .filter(|size| *size <= 100000)
@@ -17,7 +18,8 @@ fn part1(input: &str) -> usize {
 fn part2(input: &str) -> Option<usize> {
     let files = parse(input);
     let needed = 30000000 - (70000000 - size_of("/", &files));
-    files.iter()
+    files
+        .iter()
         .filter(|(_, file)| **file == File::Directory)
         .map(|(path, _)| size_of(path, &files))
         .filter(|size| *size >= needed)
@@ -25,11 +27,12 @@ fn part2(input: &str) -> Option<usize> {
 }
 
 fn size_of(dir: &str, files: &BTreeMap<String, File>) -> usize {
-    files.iter()
+    files
+        .iter()
         .filter(|(path, _)| path.starts_with(dir))
         .filter_map(|(_, file)| match *file {
             File::Data(s) => Some(s),
-            File::Directory => None
+            File::Directory => None,
         })
         .sum()
 }
@@ -42,19 +45,19 @@ fn parse(input: &str) -> BTreeMap<String, File> {
         match line {
             "$ cd .." => {
                 current.pop();
-            },
+            }
             line if line.starts_with("$ cd ") => {
                 current.push(parts[2]);
-            },
+            }
             line if !line.starts_with("$") => {
                 files.insert(
                     absolute_path(&current, &parts[1]),
                     match line.starts_with("dir") {
                         true => File::Directory,
-                        false => File::Data(parts[0].parse().unwrap())
-                    }
+                        false => File::Data(parts[0].parse().unwrap()),
+                    },
                 );
-            },
+            }
             _ => {}
         }
     }
@@ -68,7 +71,7 @@ fn absolute_path(current: &Vec<&str>, file: &str) -> String {
 #[derive(PartialEq, Eq, Debug)]
 enum File {
     Directory,
-    Data(usize)
+    Data(usize),
 }
 
 #[cfg(test)]

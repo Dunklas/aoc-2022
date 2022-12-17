@@ -20,15 +20,13 @@ fn part1(input: &str) -> usize {
 }
 
 fn part2(input: &str) -> usize {
-    let mut knots = (0..10)
-        .map(|_| Coordinate::new(0, 0))
-        .collect::<Vec<_>>();
+    let mut knots = (0..10).map(|_| Coordinate::new(0, 0)).collect::<Vec<_>>();
     let mut visited: HashSet<Coordinate> = HashSet::new();
     parse(input).into_iter().for_each(|(dir, n)| {
         (0..n).for_each(|_| {
             knots[0] = move_head(&knots[0], dir);
             (1..knots.len()).for_each(|i| {
-                knots[i] = follow(&knots[i-1], &knots[i]);
+                knots[i] = follow(&knots[i - 1], &knots[i]);
             });
             visited.insert(knots.last().unwrap().clone());
         });
@@ -42,7 +40,7 @@ fn move_head(head: &Coordinate, dir: &str) -> Coordinate {
         "D" => Coordinate::new(head.x, head.y - 1),
         "L" => Coordinate::new(head.x - 1, head.y),
         "U" => Coordinate::new(head.x, head.y + 1),
-        _ => panic!("Unexpected dir: {}", dir)
+        _ => panic!("Unexpected dir: {}", dir),
     }
 }
 
@@ -52,12 +50,13 @@ fn follow(head: &Coordinate, tail: &Coordinate) -> Coordinate {
     }
     Coordinate::new(
         tail.x + (head.x - tail.x).signum() * 1,
-        tail.y + (head.y - tail.y).signum() * 1
+        tail.y + (head.y - tail.y).signum() * 1,
     )
 }
 
-fn parse(input: &str) -> Vec<(&str, i32)>{
-    input.lines()
+fn parse(input: &str) -> Vec<(&str, i32)> {
+    input
+        .lines()
         .map(|line| line.split(" ").collect::<Vec<&str>>())
         .map(|parts| (parts[0], parts[1].parse::<i32>().unwrap()))
         .collect()

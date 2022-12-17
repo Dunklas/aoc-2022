@@ -1,12 +1,12 @@
 #[derive(PartialEq, Eq, Debug, Hash, Clone)]
 pub struct Coordinate {
     pub x: i32,
-    pub y: i32
+    pub y: i32,
 }
 
 impl Coordinate {
     pub fn new(x: i32, y: i32) -> Coordinate {
-        Coordinate{x, y}
+        Coordinate { x, y }
     }
     pub fn is_adjacent_to(&self, other: &Coordinate, diagonally: bool) -> bool {
         if self.x == other.x && self.y.abs_diff(other.y) == 1 {

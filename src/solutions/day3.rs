@@ -6,7 +6,8 @@ pub fn run(input: &str) {
 }
 
 fn part1(input: &str) -> i32 {
-    input.lines()
+    input
+        .lines()
         .map(|line| line.split_at(line.len() / 2))
         .map(|(first, second)| items_in_all(&[first, second]))
         .flatten()
@@ -15,7 +16,9 @@ fn part1(input: &str) -> i32 {
 }
 
 fn part2(input: &str) -> i32 {
-    input.lines().collect::<Vec<_>>()
+    input
+        .lines()
+        .collect::<Vec<_>>()
         .chunks(3)
         .map(|chunk| items_in_all(chunk))
         .flatten()
@@ -25,16 +28,19 @@ fn part2(input: &str) -> i32 {
 
 fn items_in_all(compartments: &[&str]) -> HashSet<char> {
     assert!(compartments.len() > 0);
-    compartments[0].chars()
-        .filter(|c| compartments.iter()
-            .all(|compartment| compartment.contains(*c))
-        )
+    compartments[0]
+        .chars()
+        .filter(|c| {
+            compartments
+                .iter()
+                .all(|compartment| compartment.contains(*c))
+        })
         .collect::<HashSet<_>>()
 }
 
 fn priority(c: char) -> i32 {
     match c {
-        'a'..='z' => c as i32 -96,
+        'a'..='z' => c as i32 - 96,
         'A'..='Z' => c as i32 - 64 + 26,
         _ => {
             panic!("Unexpected char: {}", c);
@@ -67,5 +73,4 @@ ttgJtRGJQctTZtZT
 CrZsJsPPZsGzwwsLwLmpwMDw";
         assert_eq!(part2(input), 70);
     }
-
 }

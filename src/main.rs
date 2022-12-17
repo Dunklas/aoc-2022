@@ -3,10 +3,10 @@ use std::{
     io::{self, Read},
 };
 
-use solutions::{day1, day2, day3, day4, day5, day6, day7, day8, day9, day10, day12};
+use solutions::{day1, day10, day12, day2, day3, day4, day5, day6, day7, day8, day9};
 
-mod utils;
 mod solutions;
+mod utils;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -16,34 +16,34 @@ fn main() {
     match day.as_str() {
         "1" => {
             day1::run(&input);
-        },
+        }
         "2" => {
             day2::run(&input);
-        },
+        }
         "3" => {
             day3::run(&input);
-        },
+        }
         "4" => {
             day4::run(&input);
-        },
+        }
         "5" => {
             day5::run(&input);
-        },
+        }
         "6" => {
             day6::run(&input);
-        },
+        }
         "7" => {
             day7::run(&input);
-        },
+        }
         "8" => {
             day8::run(&input);
-        },
+        }
         "9" => {
             day9::run(&input);
-        },
+        }
         "10" => {
             day10::run(&input);
-        },
+        }
         "12" => {
             day12::run(&input);
         }

@@ -14,7 +14,10 @@ fn part1(input: &str) -> String {
             stacks[*target].push(tmp);
         });
     });
-    stacks.iter().map(|stack| stack.last().unwrap()).collect::<String>()
+    stacks
+        .iter()
+        .map(|stack| stack.last().unwrap())
+        .collect::<String>()
 }
 
 fn part2(input: &str) -> String {
@@ -25,28 +28,51 @@ fn part2(input: &str) -> String {
         let mut to_move = stacks[*source].split_off(split_i);
         stacks[*target].append(&mut to_move);
     });
-    stacks.iter().map(|stack| stack.last().unwrap()).collect::<String>()
+    stacks
+        .iter()
+        .map(|stack| stack.last().unwrap())
+        .collect::<String>()
 }
 
 fn parse_stacks(input: &str) -> Vec<Vec<char>> {
     let stacks_raw = input.split("\n\n").collect::<Vec<_>>()[0];
     let max = stacks_raw.lines().map(|l| l.len()).max().unwrap();
-    (1..max).step_by(4)
-        .map(|column_i| stacks_raw.lines().rev()
-            .filter_map(|line| line.chars().nth(column_i))
-            .filter(|c| c.is_alphabetic())
-            .collect()
-        ).collect()
+    (1..max)
+        .step_by(4)
+        .map(|column_i| {
+            stacks_raw
+                .lines()
+                .rev()
+                .filter_map(|line| line.chars().nth(column_i))
+                .filter(|c| c.is_alphabetic())
+                .collect()
+        })
+        .collect()
 }
 
 fn parse_instructions(input: &str) -> Vec<(u32, usize, usize)> {
     let re = Regex::new(r"move (\d+) from (\d+) to (\d+)").unwrap();
-    input.split("\n\n").collect::<Vec<_>>()[1].lines()
+    input.split("\n\n").collect::<Vec<_>>()[1]
+        .lines()
         .map(|line| {
             let caps = re.captures(line).unwrap();
-            let num = caps.get(1).map_or("", |m| m.as_str()).parse::<u32>().unwrap();
-            let source = caps.get(2).map_or("", |m| m.as_str()).parse::<usize>().unwrap() - 1;
-            let target = caps.get(3).map_or("", |m| m.as_str()).parse::<usize>().unwrap() - 1;
+            let num = caps
+                .get(1)
+                .map_or("", |m| m.as_str())
+                .parse::<u32>()
+                .unwrap();
+            let source = caps
+                .get(2)
+                .map_or("", |m| m.as_str())
+                .parse::<usize>()
+                .unwrap()
+                - 1;
+            let target = caps
+                .get(3)
+                .map_or("", |m| m.as_str())
+                .parse::<usize>()
+                .unwrap()
+                - 1;
             (num, source, target)
         })
         .collect()

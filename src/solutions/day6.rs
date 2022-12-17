@@ -14,7 +14,9 @@ fn part2(input: &str) -> usize {
 }
 
 fn solve(input: &str, window_size: usize) -> Option<usize> {
-    input.chars().collect::<Vec<_>>()
+    input
+        .chars()
+        .collect::<Vec<_>>()
         .windows(window_size)
         .enumerate()
         .filter(|(_, w)| w.into_iter().collect::<HashSet<_>>().len() == window_size)
