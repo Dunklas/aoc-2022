@@ -9,44 +9,30 @@ pub fn run(input: &str) {
 
 fn part1(input: &str) -> usize {
     let grid = Grid::<char>::parse(input);
-    let start = grid.find_first('S').unwrap();
-    let target = grid.find_first('E').unwrap();
-    traverse(start, target, &grid).unwrap()
+    let start = grid.find_first('E').unwrap();
+    traverse(start, 'S', &grid).unwrap()
 }
 
 fn part2(input: &str) -> usize {
     let grid = Grid::<char>::parse(input);
-    let target = grid.find_first('E').unwrap();
-    let mut possible_starts = grid.find('a');
-    possible_starts.push(grid.find_first('S').unwrap());
+    let start = grid.find_first('E').unwrap();
 
-    let mut shortest = usize::MAX;
-    for s in possible_starts {
-        match traverse(s, target, &grid) {
-            Some(len) => {
-                if len < shortest {
-                    shortest = len;
-                }
-            },
-            None => {}
-        }
-    }
-    shortest
+    traverse(start, 'a', &grid).unwrap()
 }
 
-fn traverse<'a>(start: &'a Coordinate, target: &'a Coordinate, grid: &'a Grid<char>) -> Option<usize> {
+fn traverse<'a>(start: &'a Coordinate, target: char, grid: &'a Grid<char>) -> Option<usize> {
     let mut to_visit: VecDeque<(&Coordinate, usize)> = vec![(start, 0)].into_iter().collect();
     let mut visited: HashSet<&Coordinate> = HashSet::new();
     while let Some((current, len)) = to_visit.pop_front() {
         if visited.contains(current) {
             continue;
         }
-        if current == target {
+        if *grid.value_at(current).unwrap() == target {
             return Some(len);
         }
         visited.insert(current);
         for neighbour in grid.adjacent(current) {
-            if height(grid.value_at(neighbour)) as i8 - height(grid.value_at(current)) as i8 > 1 {
+            if height(grid.value_at(current)) as i8 - height(grid.value_at(neighbour)) as i8 > 1 {
                 continue;
             }
             to_visit.push_back((neighbour, len + 1));
