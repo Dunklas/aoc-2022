@@ -1,5 +1,7 @@
 use std::collections::HashSet;
 
+use crate::utils::coordinate::Coordinate;
+
 pub fn run(input: &str) {
     println!("Part 1: {}", part1(input));
     println!("Part 2: {}", part2(input));
@@ -45,7 +47,7 @@ fn move_head(head: &Coordinate, dir: &str) -> Coordinate {
 }
 
 fn follow(head: &Coordinate, tail: &Coordinate) -> Coordinate {
-    if tail == head || tail.adjacent(head) {
+    if tail == head || tail.is_adjacent_to(head, true) {
         return Coordinate::new(tail.x, tail.y);
     }
     Coordinate::new(
@@ -59,30 +61,6 @@ fn parse(input: &str) -> Vec<(&str, i32)>{
         .map(|line| line.split(" ").collect::<Vec<&str>>())
         .map(|parts| (parts[0], parts[1].parse::<i32>().unwrap()))
         .collect()
-}
-
-#[derive(PartialEq, Eq, Debug, Hash, Clone)]
-struct Coordinate {
-    pub x: i32,
-    pub y: i32
-}
-
-impl Coordinate {
-    pub fn new(x: i32, y: i32) -> Coordinate {
-        Coordinate{x, y}
-    }
-    pub fn adjacent(&self, other: &Coordinate) -> bool {
-        if self.x == other.x && self.y.abs_diff(other.y) == 1 {
-            return true;
-        }
-        if self.y == other.y && self.x.abs_diff(other.x) == 1 {
-            return true;
-        }
-        if self.x.abs_diff(other.x) == 1 && self.y.abs_diff(other.y) == 1 {
-            return true;
-        }
-        false
-    }
 }
 
 #[cfg(test)]
