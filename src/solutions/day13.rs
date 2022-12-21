@@ -6,7 +6,9 @@ pub fn run(input: &str) {
 }
 
 fn part1(input: &str) -> usize {
-    parse(input).chunks(2).enumerate()
+    parse(input)
+        .chunks(2)
+        .enumerate()
         .filter(|(_, packets)| packets[0] < packets[1])
         .map(|(i, _)| i + 1)
         .sum()
@@ -14,16 +16,22 @@ fn part1(input: &str) -> usize {
 
 fn part2(input: &str) -> usize {
     let mut packets = parse(input);
-    packets.append(&mut vec![Value::List("[[2]]".to_owned()), Value::List("[[6]]".to_owned())]);
+    packets.append(&mut vec![
+        Value::List("[[2]]".to_owned()),
+        Value::List("[[6]]".to_owned()),
+    ]);
     packets.sort();
-    packets.into_iter().enumerate()
+    packets
+        .into_iter()
+        .enumerate()
         .filter(|(_, p)| p.is_separator())
         .map(|(i, _)| i + 1)
         .product()
 }
 
 fn parse(input: &str) -> Vec<Value> {
-    input.lines()
+    input
+        .lines()
         .filter(|line| !line.is_empty())
         .map(|line| Value::List(line.to_owned()))
         .collect()
@@ -34,7 +42,7 @@ impl Ord for Value {
         match self {
             Value::Integer(l) => match other {
                 Value::Integer(r) => l.cmp(r),
-                Value::List(_) => Value::List(format!("[{}]", l)).cmp(other)
+                Value::List(_) => Value::List(format!("[{}]", l)).cmp(other),
             },
             Value::List(_) => match other {
                 Value::Integer(r) => self.cmp(&Value::List(format!("[{}]", r))),
@@ -50,13 +58,13 @@ impl Ord for Value {
                             continue;
                         }
                         return result;
-                    };
+                    }
                     if let Some(_) = r_iter.next() {
-                        return Ordering::Less
+                        return Ordering::Less;
                     }
                     Ordering::Equal
                 }
-            }
+            },
         }
     }
 }
@@ -70,27 +78,30 @@ impl PartialOrd for Value {
 #[derive(Eq, PartialEq, Debug)]
 enum Value {
     Integer(u32),
-    List(String)
+    List(String),
 }
 
 impl Value {
     fn iter<'a>(&'a self) -> ValueIterator<'a> {
         match self {
-            Value::List(s) => ValueIterator { content: &s[1..s.len() - 1], pos: 0 },
-            _ => panic!("Not a list")
+            Value::List(s) => ValueIterator {
+                content: &s[1..s.len() - 1],
+                pos: 0,
+            },
+            _ => panic!("Not a list"),
         }
     }
     fn is_separator(&self) -> bool {
         match self {
             Value::List(c) => c == "[[2]]" || c == "[[6]]",
-            _ => false
+            _ => false,
         }
     }
 }
 
 struct ValueIterator<'a> {
     content: &'a str,
-    pos: usize
+    pos: usize,
 }
 
 impl<'a> Iterator for ValueIterator<'a> {
@@ -100,18 +111,21 @@ impl<'a> Iterator for ValueIterator<'a> {
         while let Some((i, c)) = iter.next() {
             let (len, v) = match c {
                 '[' => match find_matching(self.content, self.pos) {
-                    Some(end) => (end + 1 - self.pos, Some(Value::List(String::from(&self.content[i..end+1])))),
-                    None => panic!("No matching end bracket found")
+                    Some(end) => (
+                        end + 1 - self.pos,
+                        Some(Value::List(String::from(&self.content[i..end + 1]))),
+                    ),
+                    None => panic!("No matching end bracket found"),
                 },
                 ',' => (1, None),
                 c if c.is_numeric() => {
                     let number: u32 = match self.content[self.pos..self.content.len()].find(",") {
-                        Some(i) => self.content[self.pos..self.pos+i].parse().unwrap(),
-                        None => self.content[self.pos..self.content.len()].parse().unwrap()
+                        Some(i) => self.content[self.pos..self.pos + i].parse().unwrap(),
+                        None => self.content[self.pos..self.content.len()].parse().unwrap(),
                     };
                     (number.to_string().len(), Some(Value::Integer(number)))
-                },
-                _ => panic!("Unexpected char")
+                }
+                _ => panic!("Unexpected char"),
             };
             self.pos += len;
             if let Some(v) = v {
@@ -132,7 +146,7 @@ fn find_matching(input: &str, start: usize) -> Option<usize> {
                 if count == 0 {
                     return Some(i);
                 }
-            },
+            }
             _ => {}
         }
     }

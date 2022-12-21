@@ -1,6 +1,6 @@
-use std::{cmp, collections::HashSet, iter};
 use lazy_static::lazy_static;
 use regex::Regex;
+use std::{cmp, collections::HashSet, iter};
 
 use crate::utils::coordinate::Coordinate;
 
@@ -54,7 +54,8 @@ fn fall(sand: Coordinate, obstacles: &HashSet<Coordinate>, y_max: i32) -> Coordi
 }
 
 fn parse(input: &str) -> HashSet<Coordinate> {
-    input.lines()
+    input
+        .lines()
         .map(|line| parse_obstacle(line))
         .flatten()
         .collect()
@@ -62,22 +63,35 @@ fn parse(input: &str) -> HashSet<Coordinate> {
 
 fn parse_obstacle(line: &str) -> HashSet<Coordinate> {
     let mut rock: HashSet<Coordinate> = HashSet::new();
-    let all_pairs = NUMBER_PAIRS.captures_iter(line)
-        .map(|cap| (cap[1].parse::<i32>().unwrap(), cap[2].parse::<i32>().unwrap()))
+    let all_pairs = NUMBER_PAIRS
+        .captures_iter(line)
+        .map(|cap| {
+            (
+                cap[1].parse::<i32>().unwrap(),
+                cap[2].parse::<i32>().unwrap(),
+            )
+        })
         .collect::<Vec<_>>();
     let mut all_pairs = all_pairs.windows(2);
     while let Some([left, right]) = all_pairs.next() {
         let x_range: Vec<_> = match left.0 == right.0 {
-            true => vec![left.0; (left.1.abs_diff(right.1) + 1) as usize].into_iter().collect(),
-            false => (cmp::min(left.0, right.0)..cmp::max(left.0, right.0) + 1).collect()
+            true => vec![left.0; (left.1.abs_diff(right.1) + 1) as usize]
+                .into_iter()
+                .collect(),
+            false => (cmp::min(left.0, right.0)..cmp::max(left.0, right.0) + 1).collect(),
         };
         let y_range: Vec<_> = match left.1 == right.1 {
-            true => vec![left.1; (left.0.abs_diff(right.0) + 1) as usize].into_iter().collect(),
-            false => (cmp::min(left.1, right.1)..cmp::max(left.1, right.1) + 1).collect()
+            true => vec![left.1; (left.0.abs_diff(right.0) + 1) as usize]
+                .into_iter()
+                .collect(),
+            false => (cmp::min(left.1, right.1)..cmp::max(left.1, right.1) + 1).collect(),
         };
-        x_range.into_iter().zip(y_range.into_iter()).for_each(|(x, y)| {
-           rock.insert(Coordinate::new(x, y));
-        })
+        x_range
+            .into_iter()
+            .zip(y_range.into_iter())
+            .for_each(|(x, y)| {
+                rock.insert(Coordinate::new(x, y));
+            })
     }
     rock
 }

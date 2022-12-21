@@ -1,10 +1,10 @@
 #[derive(PartialEq, Eq, Debug, Hash, Clone)]
-pub struct Coordinate{
+pub struct Coordinate {
     pub x: i32,
     pub y: i32,
 }
 
-impl Coordinate{
+impl Coordinate {
     pub fn new(x: i32, y: i32) -> Coordinate {
         Coordinate { x, y }
     }

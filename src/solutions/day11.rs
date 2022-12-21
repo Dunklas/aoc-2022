@@ -1,6 +1,6 @@
-use std::collections::VecDeque;
 use lazy_static::lazy_static;
 use regex::Regex;
+use std::collections::VecDeque;
 
 lazy_static! {
     static ref MANY_NUMBERS: Regex = Regex::new(r"(\d+),??").unwrap();
@@ -37,10 +37,7 @@ fn simulate(mut monkeys: Vec<Monkey>, n: usize, relief: Box<dyn Fn(u64) -> u64>)
             while let Some(item) = current.items.pop_front() {
                 let worry_level = relief(current.inspect(item));
                 counts[c] += 1;
-                throws.push((
-                    worry_level,
-                    current.calculate_target(worry_level)
-                ));
+                throws.push((worry_level, current.calculate_target(worry_level)));
             }
             throws.into_iter().for_each(|(item, target)| {
                 monkeys.get_mut(target).unwrap().items.push_back(item);
@@ -51,16 +48,26 @@ fn simulate(mut monkeys: Vec<Monkey>, n: usize, relief: Box<dyn Fn(u64) -> u64>)
 }
 
 fn parse(input: &str) -> Vec<Monkey> {
-    input.split("\n\n")
+    input
+        .split("\n\n")
         .map(|raw_monkey| {
             let lines = raw_monkey.lines().collect::<Vec<&str>>();
             let operation_raw = OPERATION.captures(lines[2]).unwrap();
             Monkey {
-                items: MANY_NUMBERS.captures_iter(lines[1]).map(|cap| cap[1].parse().unwrap()).collect(),
+                items: MANY_NUMBERS
+                    .captures_iter(lines[1])
+                    .map(|cap| cap[1].parse().unwrap())
+                    .collect(),
                 operation: (operation_raw[1].to_owned(), operation_raw[2].to_owned()),
-                test_value: TRAILING_NUMBER.captures(lines[3]).unwrap()[1].parse().unwrap(),
-                true_target: TRAILING_NUMBER.captures(lines[4]).unwrap()[1].parse().unwrap(),
-                false_target: TRAILING_NUMBER.captures(lines[5]).unwrap()[1].parse().unwrap()
+                test_value: TRAILING_NUMBER.captures(lines[3]).unwrap()[1]
+                    .parse()
+                    .unwrap(),
+                true_target: TRAILING_NUMBER.captures(lines[4]).unwrap()[1]
+                    .parse()
+                    .unwrap(),
+                false_target: TRAILING_NUMBER.captures(lines[5]).unwrap()[1]
+                    .parse()
+                    .unwrap(),
             }
         })
         .collect()
@@ -91,7 +98,7 @@ impl Monkey {
         let test = worry % self.test_value == 0;
         match test {
             true => self.true_target,
-            false => self.false_target
+            false => self.false_target,
         }
     }
 }
