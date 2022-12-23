@@ -6,7 +6,8 @@ use regex::Regex;
 use crate::utils::coordinate::Coordinate;
 
 lazy_static! {
-    static ref COORDINATES: Regex = Regex::new(r"x=(\-?\d+), y=(\-?\d+).*x=(\-?\d+), y=(\-?\d+)$").unwrap();
+    static ref COORDINATES: Regex =
+        Regex::new(r"x=(\-?\d+), y=(\-?\d+).*x=(\-?\d+), y=(\-?\d+)$").unwrap();
 }
 
 pub fn run(input: &str) {
@@ -29,15 +30,16 @@ fn part2(input: &str, max: i32) -> Option<i64> {
         if y_coverage.len() == 1 {
             continue;
         }
-        return Some(y_coverage.first().unwrap().end as i64 * 4000000 + y as i64); 
+        return Some(y_coverage.first().unwrap().end as i64 * 4000000 + y as i64);
     }
     None
 }
 
 fn merge_ranges(mut ranges: Vec<Range<i32>>) -> Vec<Range<i32>> {
     ranges.sort_by(|a, b| a.start.cmp(&b.start));
-    ranges.into_iter()
-        .fold(Vec::<Range<i32>>::new(), |mut acc, range | {
+    ranges
+        .into_iter()
+        .fold(Vec::<Range<i32>>::new(), |mut acc, range| {
             match acc.pop() {
                 Some(prev_range) => {
                     if prev_range.end >= range.start {
@@ -46,7 +48,7 @@ fn merge_ranges(mut ranges: Vec<Range<i32>>) -> Vec<Range<i32>> {
                         acc.push(prev_range.start..prev_range.end);
                         acc.push(range.start..range.end);
                     }
-                },
+                }
                 None => {
                     acc.push(range.start..range.end);
                 }
@@ -61,23 +63,26 @@ fn row_coverage(sensors: &Vec<Sensor>, target_y: i32, x_cap: Option<i32>) -> Vec
         let centre_distance = sensor.pos.y.abs_diff(target_y);
         let current_distance = match sensor.distance.checked_sub(centre_distance) {
             Some(d) => d,
-            None => continue
+            None => continue,
         };
-        covered.push((sensor.pos.x - current_distance as i32)..match x_cap {
-            Some(cap) => cap.min(sensor.pos.x + current_distance as i32) + 1,
-            None => sensor.pos.x + current_distance as i32 + 1
-        });
+        covered.push(
+            (sensor.pos.x - current_distance as i32)..match x_cap {
+                Some(cap) => cap.min(sensor.pos.x + current_distance as i32) + 1,
+                None => sensor.pos.x + current_distance as i32 + 1,
+            },
+        );
     }
     covered
 }
 
 fn parse(input: &str) -> Vec<Sensor> {
-    input.lines()
+    input
+        .lines()
         .map(|line| {
             let cap = COORDINATES.captures(line).unwrap();
             Sensor::new(
                 Coordinate::new(cap[1].parse().unwrap(), cap[2].parse().unwrap()),
-                &Coordinate::new(cap[3].parse().unwrap(), cap[4].parse().unwrap())
+                &Coordinate::new(cap[3].parse().unwrap(), cap[4].parse().unwrap()),
             )
         })
         .collect()
@@ -90,7 +95,7 @@ fn manhattan(c1: &Coordinate, c2: &Coordinate) -> u32 {
 #[derive(Debug)]
 struct Sensor {
     pos: Coordinate,
-    distance: u32 
+    distance: u32,
 }
 
 impl Sensor {
@@ -130,5 +135,4 @@ Sensor at x=20, y=1: closest beacon is at x=15, y=3"
     fn test_part2() {
         assert_eq!(part2(input(), 20), Some(56000011));
     }
-
 }
