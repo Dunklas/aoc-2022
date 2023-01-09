@@ -4,7 +4,8 @@ use std::{
 };
 
 use solutions::{
-    day1, day10, day11, day12, day13, day14, day15, day2, day3, day4, day5, day6, day7, day8, day9,
+    day1, day10, day11, day12, day13, day14, day15, day16, day2, day3, day4, day5, day6, day7,
+    day8, day9,
 };
 
 mod solutions;
@@ -60,6 +61,9 @@ fn main() {
         }
         "15" => {
             day15::run(&input);
+        }
+        "16" => {
+            day16::run(&input);
         }
         _ => panic!("Solution not found"),
     };
