@@ -6,7 +6,7 @@ pub fn run(input: &str) {
 fn part1(input: &str) -> usize {
     input
         .split("\n\n")
-        .map(|group| group.split("\n").map(|x| x.parse::<usize>().unwrap()).sum())
+        .map(|group| group.split('\n').map(|x| x.parse::<usize>().unwrap()).sum())
         .max()
         .unwrap()
 }
@@ -14,7 +14,7 @@ fn part1(input: &str) -> usize {
 fn part2(input: &str) -> usize {
     let mut elfs: Vec<usize> = input
         .split("\n\n")
-        .map(|group| group.split("\n").map(|x| x.parse::<usize>().unwrap()).sum())
+        .map(|group| group.split('\n').map(|x| x.parse::<usize>().unwrap()).sum())
         .collect();
     elfs.sort();
     elfs.into_iter().rev().take(3).sum()

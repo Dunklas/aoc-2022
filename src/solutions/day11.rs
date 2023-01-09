@@ -31,12 +31,12 @@ fn part2(input: &str) -> u64 {
 fn simulate(mut monkeys: Vec<Monkey>, n: usize, relief: Box<dyn Fn(u64) -> u64>) -> Vec<u64> {
     let mut counts = vec![0u64; monkeys.len()];
     for _ in 0..n {
-        for c in 0..monkeys.len() {
-            let current = monkeys.get_mut(c).unwrap();
+        for (i, count) in counts.iter_mut().enumerate() {
+            let current = monkeys.get_mut(i).unwrap();
             let mut throws = Vec::<(u64, usize)>::new();
             while let Some(item) = current.items.pop_front() {
                 let worry_level = relief(current.inspect(item));
-                counts[c] += 1;
+                *count += 1;
                 throws.push((worry_level, current.calculate_target(worry_level)));
             }
             throws.into_iter().for_each(|(item, target)| {

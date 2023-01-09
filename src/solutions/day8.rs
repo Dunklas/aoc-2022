@@ -22,13 +22,12 @@ fn part2(input: &str) -> Option<usize> {
     trees
         .iter()
         .enumerate()
-        .map(|(y, row)| {
+        .flat_map(|(y, row)| {
             row.iter()
                 .enumerate()
                 .map(|(x, _)| scenic_score((y, x), &trees))
                 .collect::<Vec<usize>>()
         })
-        .flatten()
         .max()
 }
 

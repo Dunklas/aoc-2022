@@ -56,7 +56,7 @@ fn parse(input: &str) -> Vec<(u8, i64)> {
             "noop" => (1, 0),
             _ => (
                 2,
-                line.split(" ").collect::<Vec<&str>>()[1]
+                line.split(' ').collect::<Vec<&str>>()[1]
                     .parse::<i64>()
                     .unwrap(),
             ),

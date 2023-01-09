@@ -10,7 +10,7 @@ fn part1(input: &str) -> usize {
     files
         .iter()
         .filter(|(_, file)| **file == File::Directory)
-        .map(|(path, _)| size_of(&path, &files))
+        .map(|(path, _)| size_of(path, &files))
         .filter(|size| *size <= 100000)
         .sum()
 }
@@ -41,7 +41,7 @@ fn parse(input: &str) -> BTreeMap<String, File> {
     let mut current: Vec<&str> = Vec::new();
     let mut files: BTreeMap<String, File> = BTreeMap::new();
     for line in input.lines() {
-        let parts = line.split(" ").collect::<Vec<&str>>();
+        let parts = line.split(' ').collect::<Vec<&str>>();
         match line {
             "$ cd .." => {
                 current.pop();
@@ -49,9 +49,9 @@ fn parse(input: &str) -> BTreeMap<String, File> {
             line if line.starts_with("$ cd ") => {
                 current.push(parts[2]);
             }
-            line if !line.starts_with("$") => {
+            line if !line.starts_with('$') => {
                 files.insert(
-                    absolute_path(&current, &parts[1]),
+                    absolute_path(&current, parts[1]),
                     match line.starts_with("dir") {
                         true => File::Directory,
                         false => File::Data(parts[0].parse().unwrap()),
@@ -64,7 +64,7 @@ fn parse(input: &str) -> BTreeMap<String, File> {
     files
 }
 
-fn absolute_path(current: &Vec<&str>, file: &str) -> String {
+fn absolute_path(current: &[&str], file: &str) -> String {
     format!("/{}/{}", current.join("/"), file)
 }
 

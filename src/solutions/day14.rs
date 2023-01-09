@@ -30,12 +30,12 @@ fn part2(input: &str) -> usize {
 }
 
 fn simulate_flow(obstacles: &mut HashSet<Coordinate>, y_max: i32, solid_floor: bool) {
-    let mut flow = iter::repeat(Coordinate::new(500, 0));
-    while let Some(sand) = flow.next() {
+    let flow = iter::repeat(Coordinate::new(500, 0));
+    for sand in flow {
         if obstacles.contains(&sand) {
             return;
         }
-        let new_pos = fall(sand, &obstacles, y_max);
+        let new_pos = fall(sand, obstacles, y_max);
         if !solid_floor && new_pos.y == y_max {
             return;
         }
@@ -44,7 +44,7 @@ fn simulate_flow(obstacles: &mut HashSet<Coordinate>, y_max: i32, solid_floor: b
 }
 
 fn fall(sand: Coordinate, obstacles: &HashSet<Coordinate>, y_max: i32) -> Coordinate {
-    for dx in vec![0, -1, 1] {
+    for dx in &[0, -1, 1] {
         let to_test = Coordinate::new(sand.x + dx, sand.y + 1);
         if !obstacles.contains(&to_test) && to_test.y <= y_max {
             return fall(to_test, obstacles, y_max);
@@ -54,11 +54,7 @@ fn fall(sand: Coordinate, obstacles: &HashSet<Coordinate>, y_max: i32) -> Coordi
 }
 
 fn parse(input: &str) -> HashSet<Coordinate> {
-    input
-        .lines()
-        .map(|line| parse_obstacle(line))
-        .flatten()
-        .collect()
+    input.lines().flat_map(parse_obstacle).collect()
 }
 
 fn parse_obstacle(line: &str) -> HashSet<Coordinate> {

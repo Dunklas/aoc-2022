@@ -19,9 +19,9 @@ fn solve(input: &str, window_size: usize) -> Option<usize> {
         .collect::<Vec<_>>()
         .windows(window_size)
         .enumerate()
-        .filter(|(_, w)| w.into_iter().collect::<HashSet<_>>().len() == window_size)
+        .filter(|(_, w)| w.iter().collect::<HashSet<_>>().len() == window_size)
         .map(|(i, _)| i + window_size)
-        .nth(0)
+        .next()
 }
 
 #[cfg(test)]

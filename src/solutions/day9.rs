@@ -49,15 +49,15 @@ fn follow(head: &Coordinate, tail: &Coordinate) -> Coordinate {
         return Coordinate::new(tail.x, tail.y);
     }
     Coordinate::new(
-        tail.x + (head.x - tail.x).signum() * 1,
-        tail.y + (head.y - tail.y).signum() * 1,
+        tail.x + (head.x - tail.x).signum(),
+        tail.y + (head.y - tail.y).signum(),
     )
 }
 
 fn parse(input: &str) -> Vec<(&str, i32)> {
     input
         .lines()
-        .map(|line| line.split(" ").collect::<Vec<&str>>())
+        .map(|line| line.split(' ').collect::<Vec<&str>>())
         .map(|parts| (parts[0], parts[1].parse::<i32>().unwrap()))
         .collect()
 }

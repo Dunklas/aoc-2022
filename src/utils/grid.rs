@@ -21,7 +21,7 @@ where
             .collect()
     }
     pub fn find_first(&self, v: S) -> Option<&Coordinate> {
-        self.find(v).into_iter().nth(0)
+        self.find(v).into_iter().next()
     }
     pub fn value_at(&self, c: &Coordinate) -> Option<&S> {
         self.data.get(c)
@@ -38,7 +38,7 @@ where
                 .get_key_value(&Coordinate::new(source.x - 1, source.y)),
         ]
         .into_iter()
-        .filter_map(|x| x)
+        .flatten()
         .map(|(coordinate, _)| coordinate)
         .collect()
     }

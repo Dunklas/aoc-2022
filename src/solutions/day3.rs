@@ -9,9 +9,8 @@ fn part1(input: &str) -> i32 {
     input
         .lines()
         .map(|line| line.split_at(line.len() / 2))
-        .map(|(first, second)| items_in_all(&[first, second]))
-        .flatten()
-        .map(|c| priority(c))
+        .flat_map(|(first, second)| items_in_all(&[first, second]))
+        .map(priority)
         .sum()
 }
 
@@ -20,14 +19,13 @@ fn part2(input: &str) -> i32 {
         .lines()
         .collect::<Vec<_>>()
         .chunks(3)
-        .map(|chunk| items_in_all(chunk))
-        .flatten()
-        .map(|c| priority(c))
+        .flat_map(items_in_all)
+        .map(priority)
         .sum()
 }
 
 fn items_in_all(compartments: &[&str]) -> HashSet<char> {
-    assert!(compartments.len() > 0);
+    assert!(!compartments.is_empty());
     compartments[0]
         .chars()
         .filter(|c| {

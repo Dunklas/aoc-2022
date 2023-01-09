@@ -89,7 +89,7 @@ fn parse(input: &str) -> Vec<Sensor> {
 }
 
 fn manhattan(c1: &Coordinate, c2: &Coordinate) -> u32 {
-    (c1.x - c2.x).abs() as u32 + (c1.y - c2.y).abs() as u32
+    (c1.x - c2.x).unsigned_abs() + (c1.y - c2.y).unsigned_abs()
 }
 
 #[derive(Debug)]

@@ -8,11 +8,7 @@ pub fn run(input: &str) {
 fn part1(input: &str) -> usize {
     input
         .lines()
-        .map(|line| {
-            line.split(",")
-                .map(|raw_range| to_range(raw_range))
-                .collect::<Vec<_>>()
-        })
+        .map(|line| line.split(',').map(to_range).collect::<Vec<_>>())
         .filter(|x| overlaps(x, true))
         .count()
 }
@@ -20,17 +16,13 @@ fn part1(input: &str) -> usize {
 fn part2(input: &str) -> usize {
     input
         .lines()
-        .map(|line| {
-            line.split(",")
-                .map(|raw_range| to_range(raw_range))
-                .collect::<Vec<_>>()
-        })
+        .map(|line| line.split(',').map(to_range).collect::<Vec<_>>())
         .filter(|x| overlaps(x, false))
         .count()
 }
 
 fn to_range(raw_range: &str) -> HashSet<u32> {
-    let parts = raw_range.split("-").collect::<Vec<&str>>();
+    let parts = raw_range.split('-').collect::<Vec<&str>>();
     let start = parts[0].parse::<u32>().unwrap();
     let end = parts[1].parse::<u32>().unwrap();
     (start..end + 1).collect()

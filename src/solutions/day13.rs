@@ -47,9 +47,9 @@ impl Ord for Value {
             Value::List(_) => match other {
                 Value::Integer(r) => self.cmp(&Value::List(format!("[{}]", r))),
                 Value::List(_) => {
-                    let mut l_iter = self.iter();
+                    let l_iter = self.iter();
                     let mut r_iter = other.iter();
-                    while let Some(l) = l_iter.next() {
+                    for l in l_iter {
                         let result = match r_iter.next() {
                             Some(r) => l.cmp(&r),
                             None => return Ordering::Greater,
@@ -59,7 +59,7 @@ impl Ord for Value {
                         }
                         return result;
                     }
-                    if let Some(_) = r_iter.next() {
+                    if r_iter.next().is_some() {
                         return Ordering::Less;
                     }
                     Ordering::Equal
@@ -82,7 +82,7 @@ enum Value {
 }
 
 impl Value {
-    fn iter<'a>(&'a self) -> ValueIterator<'a> {
+    fn iter(&self) -> ValueIterator {
         match self {
             Value::List(s) => ValueIterator {
                 content: &s[1..s.len() - 1],
@@ -107,8 +107,8 @@ struct ValueIterator<'a> {
 impl<'a> Iterator for ValueIterator<'a> {
     type Item = Value;
     fn next(&mut self) -> Option<Self::Item> {
-        let mut iter = self.content.chars().enumerate().skip(self.pos);
-        while let Some((i, c)) = iter.next() {
+        let iter = self.content.chars().enumerate().skip(self.pos);
+        for (i, c) in iter {
             let (len, v) = match c {
                 '[' => match find_matching(self.content, self.pos) {
                     Some(end) => (
@@ -119,7 +119,7 @@ impl<'a> Iterator for ValueIterator<'a> {
                 },
                 ',' => (1, None),
                 c if c.is_numeric() => {
-                    let number: u32 = match self.content[self.pos..self.content.len()].find(",") {
+                    let number: u32 = match self.content[self.pos..self.content.len()].find(',') {
                         Some(i) => self.content[self.pos..self.pos + i].parse().unwrap(),
                         None => self.content[self.pos..self.content.len()].parse().unwrap(),
                     };
